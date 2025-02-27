@@ -8,16 +8,16 @@ export async function middleware(req: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  const publicPaths = path === "/" || path === "/signup";
+  const publicPaths = path === "/login" || path === "/signup";
 
   if (publicPaths && token) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+    return NextResponse.redirect(new URL("/", req.nextUrl));
   }
   if (!publicPaths && !token) {
-    return NextResponse.redirect(new URL("/", req.nextUrl));
+    return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 }
 
 export const config = {
-  matcher: ["/", "/signup", "/dashboard"],
+  matcher: ["/login", "/signup", "/profile"],
 };

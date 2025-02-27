@@ -1,10 +1,6 @@
 "use client";
 
 import { Mail, Lock } from "lucide-react";
-import Image from "next/image";
-// import bg from "../public/bg3.png";
-// import logo from "../public/logo.png";
-// import google from "../public/google2.svg";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -50,7 +46,7 @@ const Login = () => {
       }
 
       setError("");
-      router.push("/dashboard");
+      router.push("/profile");
     } catch (error) {
       console.log(error);
       setError("");

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState , ReactNode} from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 
@@ -10,7 +10,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-import { ReactNode } from "react";
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession();
