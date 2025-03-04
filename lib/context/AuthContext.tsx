@@ -5,7 +5,9 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 
 interface AuthContextType {
-  user: { name: string; email: string; id: string } | null;
+  user: {
+    image: any; name: string; email: string; id: string 
+} | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -25,6 +27,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
               name: response.data.user.name,
               email: response.data.user.email,
               id: response.data.user._id,
+              image: response.data.user.image
             });
           }
         })

@@ -58,6 +58,7 @@ export const authOptions: NextAuthOptions = {
           const newUser = new User({
             name: name,
             email: email,
+            image: user.image,
           });
           const res = await newUser.save();
           if (res.status === 200 || res.status === 201) {

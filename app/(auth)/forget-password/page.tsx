@@ -61,9 +61,10 @@ export default function ForgetPassword() {
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
           </CardContent>
-          <CardFooter className="space-y-2">
-            <Button type="submit" className="w-full" disabled={pending}>Reset passowrd</Button>
-            {/* <Button onClick={(e)=> handleProvider(e, "google")} className="w-full bg-blue-500 hover:bg-blue-600 text-white">Login with Google</Button> */}
+          <CardFooter className="space-y-2 pt-4">
+            <Button type="submit" className="w-full" disabled={pending}>
+              {pending? "Resetting password..." : "Reset password"}
+            </Button>
           </CardFooter>
         </form>
       </Card>

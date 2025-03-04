@@ -2,37 +2,59 @@
 
 import { useAuth } from "@/lib/context/AuthContext";
 import { signOut } from "next-auth/react";
-import React from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const Profile = () => {
   const authContext = useAuth();
   const user = authContext ? authContext.user : null;
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="w-full max-w-2xl grid place-items-center mx-auto py-40 gap-6 bg-slate-50">
-        <span className="text-4xl tracking-wide font-semibold capitalize text-[#5D7DF3]">
-          Welcome to the Profile
-        </span>
-
-        {user ? (
-          <>
-            <span className="text-2xl tracking-normal py-10 font-semibold">
-              {user.name}
-            </span>
-            <span className="text-lg">{user.email}</span>
-            <span className="text-lg">User ID: {user.id}</span>
-          </>
-        ) : (
-          <p>Loading user data...</p>
-        )}
-
-        <button
-          onClick={() => signOut()}
-          className="bg-slate-950 text-white rounded text-lg w-auto px-6 py-3 uppercase"
-        >
-          Logout
-        </button>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+      <div className="flex w-full max-w-md flex-col gap-6">
+        <Card>
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Profile</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {user ? (
+              <div className="grid gap-6">
+                <div className="flex flex-col items-center gap-4">
+                  {user.image ? (
+                    <Image
+                      src={user.image}
+                      alt={user.name}
+                      width={100}
+                      height={100}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center">
+                      <span className="text-gray-500">No Image</span>
+                    </div>
+                  )}
+                  <span className="text-xl font-semibold">{user.name}</span>
+                  <span className="text-lg">{user.email}</span>
+                  <span className="text-lg">User ID: {user.id}</span>
+                </div>
+                <Button
+                  onClick={() => signOut()}
+                  className="w-full"
+                >
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <p>Loading user data...</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

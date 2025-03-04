@@ -1,5 +1,5 @@
 import User from '@/lib/models/users';
-import { connectToDB } from '@/lib/mongoDb';
+import { connectToDB } from "@/lib/mongoDB";
 import crypto from 'crypto';
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
