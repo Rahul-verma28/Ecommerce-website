@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import axios from "axios";
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState<boolean>(false);
   const router = useRouter();
@@ -19,39 +18,38 @@ export default function ForgetPassword() {
     e.preventDefault();
     setPending(true);
 
-    try {
-      const res = await fetch("api/forget_password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email}),
-      });
+    if (!email || email === "") {
+      setError("Please enter your email");
+      setPending(false);
+      return;
+    }
 
-      if (!res.ok) {
-        const message = await res.text(); // Fetch the error message
-        setError(message || "User with this email does not exist");
+    try {
+      const res = await axios.post("/api/forget_password", { email });
+
+      if (res.status === 200) {
+        setError("");
+        router.push("/password-reset-email-sent");
         return;
       }
-
-      console.log(res);
-
-      router.push("/password-reset-email-sent");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      setError("Failed to sign up");
-    }
-    finally {
-      setPending(false);
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.error || "Something went wrong");
+      } else {
+        setError("Something went wrong");
       }
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>Forget passsword</CardTitle>
-          <CardDescription>Enter your credentials to access your account</CardDescription>
+          <CardTitle>Forget password</CardTitle>
+          <CardDescription>Enter your email to reset your password</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -61,10 +59,8 @@ export default function ForgetPassword() {
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
           </CardContent>
-          <CardFooter className="space-y-2 pt-4">
-            <Button type="submit" className="w-full" disabled={pending}>
-              {pending? "Resetting password..." : "Reset password"}
-            </Button>
+          <CardFooter className="space-y-2 mt-4">
+            <Button type="submit" className="w-full" disabled={pending}>Reset password</Button>
           </CardFooter>
         </form>
       </Card>

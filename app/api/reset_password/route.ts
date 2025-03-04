@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import User from "@/lib/models/users";
-import { connectToDB } from "@/lib/mongoDb";
+import { connectToDB } from "@/lib/mongoDB";
 
 export async function POST(request: Request) {
   const { token, password } = await request.json();

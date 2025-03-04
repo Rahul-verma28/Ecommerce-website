@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useAuth } from "@/lib/context/AuthContext";
 import { Heart } from "lucide-react";
@@ -13,35 +13,50 @@ interface HeartFavoriteProps {
 const HeartFavorite = ({ product, updateSignedInUser }: HeartFavoriteProps) => {
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
 
-    const authContext = useAuth();
-    const user = authContext ? authContext.user : null;
+  const authContext = useAuth();
+  const user = authContext ? authContext.user : null;
 
-  const handleLike = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  useEffect(() => {
+    if (user?.wishlist && Array.isArray(user.wishlist)) {
+      setIsLiked(user.wishlist.includes(product._id));
+    }
+  }, [user, product._id]);
+
+  const handleLike = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
+
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
     try {
-      if (!user) {
-        router.push("/sign-in");
-        return;
-      } else {
-        const res = await fetch("/api/wishlist", {
-          method: "POST",
-          body: JSON.stringify({ productId: product._id }),
-        });
-        const updatedUser = await res.json();
-        setIsLiked(updatedUser.wishlist.includes(product._id));
-        updateSignedInUser && updateSignedInUser(updatedUser);
+      const res = await fetch("/api/wishlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product._id, userId: user.id }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update wishlist");
+
+      const updatedUser = await res.json();
+      setIsLiked(updatedUser.wishlist.includes(product._id));
+
+      if (updateSignedInUser) {
+        updateSignedInUser(updatedUser);
       }
     } catch (err) {
-      console.log("[wishlist_POST]", err);
+      console.error("[wishlist_POST]", err);
     }
   };
 
   return (
     <button onClick={handleLike}>
-      <Heart fill={`${isLiked ? "red" : "white"}`} />
+      <Heart fill={isLiked ? "red" : "white"} />
     </button>
   );
 };

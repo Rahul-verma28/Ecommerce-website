@@ -6,6 +6,7 @@ import axios from "axios";
 
 interface AuthContextType {
   user: {
+    wishlist(wishlist: any): unknown;
     image: any; name: string; email: string; id: string 
 } | null;
 }

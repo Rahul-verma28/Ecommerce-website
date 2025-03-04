@@ -7,14 +7,14 @@ import nodemailer from 'nodemailer';
 export async function POST(request: Request) {
   const { email } = await request.json();
   if (!email) {
-    return NextResponse.json({ message: "Email is required" }, { status: 400 });
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
 
   try {
     await connectToDB();
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ message: "User does not exist" }, { status: 400 });
+      return NextResponse.json({ error: "User does not exist" }, { status: 400 });
     }
 
     const resetPasswordToken = crypto.randomBytes(32).toString("hex");
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     await user.save();
 
-    const resetUrl = `${process.env.CLIENT_URL}/reset_password?token=${resetPasswordToken}`;
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetPasswordToken}`;
 
     const transporter = nodemailer.createTransport({
       service: "Gmail",
@@ -46,6 +46,6 @@ export async function POST(request: Request) {
 
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
+    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 }

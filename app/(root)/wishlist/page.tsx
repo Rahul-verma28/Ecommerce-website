@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
 import Loader from "@/components/Loader";
 import ProductCard from "@/components/ProductCard";
+import { useAuth } from "@/lib/context/AuthContext";
 
 const Wishlist = () => {
-  const { user } = useUser();
-
+  const authContext = useAuth();
+  const user = authContext ? authContext.user : null;
   const [isLoading, setIsLoading] = useState(true);
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +21,7 @@ const Wishlist = () => {
       setError(null);
 
       // Fetch wishlist data
-      const response = await fetch("/api/users/wishlist");
+      const response = await fetch("/api/wishlist");
       if (!response.ok) throw new Error("Failed to fetch wishlist data");
 
       const data = await response.json();
@@ -53,11 +53,11 @@ const Wishlist = () => {
 
   return (
     <div className="px-10 py-5">
-      <h1 className="text-heading3-bold my-10">Your Wishlist</h1>
+      <h1 className="text-2xl font-semibold my-10">Your Wishlist</h1>
       {wishlistProducts.length === 0 ? (
         <p>No items in your wishlist.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
           {wishlistProducts.map((product: any) => (
             <ProductCard key={product._id} product={product} />
           ))}

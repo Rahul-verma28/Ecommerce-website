@@ -25,6 +25,7 @@ type UserType = {
   name: string;
   email: string;
   password?: string;
+  image: string;
   wishlist: [string];
   createdAt: string;
   updatedAt: string;
