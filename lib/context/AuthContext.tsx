@@ -6,8 +6,8 @@ import axios from "axios";
 
 interface AuthContextType {
   user: {
-    wishlist(wishlist: any): unknown;
-    image: any; name: string; email: string; id: string 
+    wishlist(wishlist): unknown;
+    image: string; name: string; email: string; id: string 
 } | null;
 }
 
@@ -28,7 +28,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
               name: response.data.user.name,
               email: response.data.user.email,
               id: response.data.user._id,
-              image: response.data.user.image
+              image: response.data.user.image,
+              wishlist: response.data.user.wishlist
             });
           }
         })

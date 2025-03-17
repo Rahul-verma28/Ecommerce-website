@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import useCart from "@/lib/hooks/useCart";
 import Link from "next/link";
@@ -9,7 +9,7 @@ const SuccessfulPayment = () => {
 
   useEffect(() => {
     cart.clearCart();
-  }, []);
+  }, [cart]);
 
   return (
     <div className="h-screen flex flex-col justify-center items-center gap-5">

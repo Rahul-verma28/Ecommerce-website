@@ -11,16 +11,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useState } from "react";
 import Image from "next/image";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import useCart from "@/lib/hooks/useCart";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function Cart() {
   //   const [cart, setcart] = useState<ProductType[]>([]);
   const cart = useCart();
   const cartItems = cart.cartItems;
+  const router = useRouter();
 
   const total = cart.cartItems.reduce(
     (acc, cartItem) => acc + cartItem.item.price * cartItem.quantity,
@@ -63,13 +64,15 @@ export function Cart() {
             </div>
           )}
           {cartItems?.length > 0 && (
-            <div className="mt-8">
+            <div className="mt-8 overflow-y-scroll">
               <div className="flow-root">
-                <ul role="list" className="-my-6 divide-y divide-gray-200">
+                <ul role="list" className="-my-6 divide-y divide-gray-200 ">
                   {cartItems.map((product) => (
                     <li key={product.item._id} className="flex py-6">
-                      <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                        <img
+                      <div className="size-24 shrink-0 overflow-hidden  rounded-md border border-gray-200">
+                        <Image
+                          width={96}
+                          height={96}
                           alt={product.item.media[0]}
                           src={product.item.media[0]}
                           className="size-full object-cover"
@@ -78,11 +81,10 @@ export function Cart() {
 
                       <div className="ml-4 flex flex-1 flex-col">
                         <div>
-                          <div className="flex justify-between text-base font-medium text-gray-900">
-                            <h3>
-                              <Link href={`products/${product.item._id}`}>
+                          <div className="flex justify-between text-base font-medium text-gray-900 ">
+                            <h3 onClick={()=> router.push(`/products/${product.item._id}`)}
+                              className="cursor-pointer">
                                 {product.item.title}
-                              </Link>
                             </h3>
                             <p className="ml-4">{product.item.price}💲</p>
                           </div>
@@ -98,7 +100,7 @@ export function Cart() {
                           <div className="flex">
                             <button
                               type="button"
-                              className="font-medium text-indigo-600 hover:text-indigo-500"
+                              className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"
                               onClick={() => cart.removeItem(product.item._id)}
                             >
                               Remove

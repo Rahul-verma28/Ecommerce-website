@@ -32,7 +32,7 @@ export default function ForgetPassword() {
         router.push("/password-reset-email-sent");
         return;
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
       if (axios.isAxiosError(error)) {
         setError(error.response?.data?.error || "Something went wrong");

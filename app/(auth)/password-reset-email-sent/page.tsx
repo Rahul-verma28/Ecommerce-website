@@ -13,7 +13,7 @@ export default function EmailSentForPasswordReset() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Password Reset Email Sent</CardTitle>
-          <CardDescription className="text-center">We've sent a password reset link to your email</CardDescription>
+          <CardDescription className="text-center">We&apos;ve sent a password reset link to your email</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center">
           <Mail className="w-16 h-16 text-blue-500 mb-4" />
